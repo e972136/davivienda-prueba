@@ -195,6 +195,10 @@ public class ProductoController {
             return ResponseEntity.status(404)
                     .header(MensajesSistema.NO_ENCONTRADO.getTipo(),MensajesSistema.NO_ENCONTRADO.getMensaje())
                     .build();
+        }catch (DaviviendaDuplicateException e){
+            return ResponseEntity.status(404)
+                    .header(MensajesSistema.ELEMENDO_DUPLICADO.getTipo(),MensajesSistema.ELEMENDO_DUPLICADO.getMensaje())
+                    .build();
         }
     }
 
@@ -213,7 +217,16 @@ public class ProductoController {
                     .header(MensajesSistema.BAD_REQUEST.getTipo(),MensajesSistema.BAD_REQUEST.getMensaje())
                     .build();
         }
-        return  ResponseEntity.ok(productoService.save(producto));
+
+        try{
+            ProductoResponse saved = productoService.save(producto);
+            return  ResponseEntity.ok(saved);
+        }catch (DaviviendaDuplicateException e){
+            return ResponseEntity.status(404)
+                    .header(MensajesSistema.ELEMENDO_DUPLICADO.getTipo(),MensajesSistema.ELEMENDO_DUPLICADO.getMensaje())
+                    .build();
+        }
+
     }
 
 

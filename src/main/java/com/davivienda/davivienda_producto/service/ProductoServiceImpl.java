@@ -4,10 +4,7 @@ import com.davivienda.davivienda_producto.dto.ProductoRequest;
 import com.davivienda.davivienda_producto.dto.ProductoResponse;
 import com.davivienda.davivienda_producto.entitie.Producto;
 import com.davivienda.davivienda_producto.repository.ProductRepository;
-import com.davivienda.davivienda_producto.utilities.DaviviendaInsuficienteException;
-import com.davivienda.davivienda_producto.utilities.DaviviendaNotFoundException;
-import com.davivienda.davivienda_producto.utilities.MapeadoProducto;
-import com.davivienda.davivienda_producto.utilities.MensajesSistema;
+import com.davivienda.davivienda_producto.utilities.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -49,6 +46,12 @@ public class ProductoServiceImpl implements ProductoService{
         if(byId.isEmpty()){
             throw new DaviviendaNotFoundException(MensajesSistema.NO_ENCONTRADO.getMensaje());
         }
+
+        Optional<Producto> byCodigo = productRepository.findByCodigo(producto.getCodigo());
+        if(byCodigo.isPresent()){
+            throw new DaviviendaDuplicateException(MensajesSistema.ELEMENDO_DUPLICADO.getMensaje());
+        }
+
         Producto productoBD = byId.get();
         Producto productoNuevo = MapeadoProducto.fromProductoRequestToProducto(producto,log);
         if(isNull(productoNuevo)){
@@ -94,7 +97,12 @@ public class ProductoServiceImpl implements ProductoService{
     }
 
     @Override
-    public ProductoResponse save(ProductoRequest producto) {
+    public ProductoResponse save(ProductoRequest producto){
+
+        Optional<Producto> byCodigo = productRepository.findByCodigo(producto.getCodigo());
+        if(byCodigo.isPresent()){
+            throw new DaviviendaDuplicateException(MensajesSistema.ELEMENDO_DUPLICADO.getMensaje());
+        }
 
         Producto p = MapeadoProducto.fromProductoRequestToProducto(producto,log);
         if(isNull(p)){

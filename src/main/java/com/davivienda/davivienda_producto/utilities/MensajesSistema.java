@@ -5,9 +5,9 @@ public enum MensajesSistema {
     NO_ENCONTRADO("error-davivienda","Producto no encontrado"),
     LISTA_VACIA("mensaje-davivienda","Lista vacia"),
     BAD_REQUEST("error-davivienda","Bad Request, ver logging"),
-
     ERROR_PARSING("error-davivienda","Problemas con el parsing"),
-    NO_HAY_EXISTENCIA("error-davivienda","No hay existencia de este producto")
+    NO_HAY_EXISTENCIA("error-davivienda","No hay existencia de este producto"),
+    ELEMENDO_DUPLICADO("error-davivienda","Codigo de producto duplicado")
     ;
 
     private final String tipo;
