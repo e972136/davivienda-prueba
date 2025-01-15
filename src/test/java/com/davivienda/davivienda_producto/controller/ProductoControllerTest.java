@@ -37,7 +37,6 @@ class ProductoControllerTest {
     @MockBean
     ProductoService productoServiceService;
 
-    ObjectMapper objectMapper;
 
     @Test
     @DisplayName(value = "Post Guardar -> Status 200 respuesta exitosa.")
