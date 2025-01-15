@@ -3,7 +3,6 @@ package com.davivienda.davivienda_producto.service;
 import com.davivienda.davivienda_producto.dto.ProductoRequest;
 import com.davivienda.davivienda_producto.dto.ProductoResponse;
 import com.davivienda.davivienda_producto.entitie.Producto;
-import com.davivienda.davivienda_producto.repository.ProductRepository;
 import com.davivienda.davivienda_producto.utilities.DaviviendaDuplicateException;
 import com.davivienda.davivienda_producto.utilities.DaviviendaInsuficienteException;
 import com.davivienda.davivienda_producto.utilities.DaviviendaNotFoundException;
@@ -26,13 +25,13 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class ProductoServiceImplTest {
 
     @Autowired
-    ProductoServiceImpl candidatoImp;
+    ProductoServiceImpl service;
 
      @Test
      @DisplayName(value = "Buscar todos")
      @Order(1)
     void findAll() {
-        int size = candidatoImp.findAll().size();
+        int size = service.findAll().size();
         assertThat(size).isEqualTo(11);
     }
 
@@ -40,7 +39,7 @@ class ProductoServiceImplTest {
     @DisplayName(value = "Buscar paginado")
     @Order(2)
     void findAllPage() {
-        Page<Producto> allPage = candidatoImp.findAllPage(1, 5);
+        Page<Producto> allPage = service.findAllPage(1, 5);
         int size = allPage.getContent().size();
         assertThat(size).isEqualTo(5);
     }
@@ -49,9 +48,9 @@ class ProductoServiceImplTest {
     @DisplayName(value = "Actualizar producto")
     @Order(3)
     void updateProducto() {
-        ProductoResponse p = candidatoImp.getByCodigo("1001");
+        ProductoResponse p = service.getByCodigo("1001");
         assertThat(p.familia()).isEqualTo("ELECTRICO");
-        Producto actualizado = candidatoImp.updateProducto(p.id(), new ProductoRequest(
+        Producto actualizado = service.updateProducto(p.id(), new ProductoRequest(
                 p.codigo(),
                 p.descripcion(),
                 "patito",
@@ -76,7 +75,7 @@ class ProductoServiceImplTest {
         );
 
         assertThatThrownBy(()->{
-                    candidatoImp.updateProducto(100,productoRequest);
+                    service.updateProducto(100,productoRequest);
         }).isInstanceOf(DaviviendaNotFoundException.class);
         //https://www.baeldung.com/assertj-exception-assertion
     }
@@ -87,7 +86,7 @@ class ProductoServiceImplTest {
     @DisplayName(value = "Listado por familia")
     @Order(5)
     void findAllByFamilia() {
-        List<Producto> motor = candidatoImp.findAllByFamilia("ACEITE");
+        List<Producto> motor = service.findAllByFamilia("ACEITE");
         assertThat(motor).hasSize(2);
     }
 
@@ -95,7 +94,7 @@ class ProductoServiceImplTest {
     @DisplayName(value = "Buscar productos disponibles")
     @Order(6)
     void findAllDisponibles() {
-        int size = candidatoImp.findAllDisponibles().size();
+        int size = service.findAllDisponibles().size();
         assertThat(size).isEqualTo(6);
     }
 
@@ -103,8 +102,8 @@ class ProductoServiceImplTest {
     @DisplayName(value = "Venta de producto")
     @Order(7)
     void ventaProducto() {
-        ProductoResponse byCodigo = candidatoImp.getByCodigo("1001");
-        Producto producto = candidatoImp.ventaProducto(byCodigo.codigo(), 1);
+        ProductoResponse byCodigo = service.getByCodigo("1001");
+        Producto producto = service.ventaProducto(byCodigo.codigo(), 1);
         assertThat(producto.getExistencia()).isEqualTo(byCodigo.existencia()-1);
     }
 
@@ -113,7 +112,7 @@ class ProductoServiceImplTest {
     @Order(8)
     void ventaProducto_noExistente() {
         assertThatThrownBy(()->{
-            candidatoImp.ventaProducto("5000", 1);
+            service.ventaProducto("5000", 1);
         }).isInstanceOf(DaviviendaNotFoundException.class);
     }
 
@@ -122,7 +121,7 @@ class ProductoServiceImplTest {
     @Order(9)
     void ventaProducto_insuficiente() {
         assertThatThrownBy(()->{
-            candidatoImp.ventaProducto("1010", 100);
+            service.ventaProducto("1010", 100);
         }).isInstanceOf(DaviviendaInsuficienteException.class);
     }
 
@@ -132,14 +131,14 @@ class ProductoServiceImplTest {
     @DisplayName(value = "Guardar producto")
     @Order(10)
     void save() {
-        ProductoResponse save = candidatoImp.save(new ProductoRequest(
+        ProductoResponse save = service.save(new ProductoRequest(
                 "2020",
                 "nuevo",
                 "CAJA",
                 BigDecimal.valueOf(1),
                 0
         ));
-        ProductoResponse byCodigo = candidatoImp.getByCodigo("2020");
+        ProductoResponse byCodigo = service.getByCodigo("2020");
         assertThat(save.codigo()).isEqualTo(byCodigo.codigo());
     }
 
@@ -158,7 +157,7 @@ class ProductoServiceImplTest {
 
 
         assertThatThrownBy(()->{
-            ProductoResponse save = candidatoImp.save(productoRequest);
+            ProductoResponse save = service.save(productoRequest);
         }).isInstanceOf(DaviviendaDuplicateException.class);
 
     }
@@ -167,7 +166,7 @@ class ProductoServiceImplTest {
     @DisplayName(value = "Buscar por codigo")
     @Order(12)
     void getByCodigo() {
-        ProductoResponse byCodigo = candidatoImp.getByCodigo("1001");
+        ProductoResponse byCodigo = service.getByCodigo("1001");
         assertThat(byCodigo.codigo()).isEqualTo("1001");
     }
 
@@ -177,7 +176,7 @@ class ProductoServiceImplTest {
     void getByCodigo_noEncontrado() {
 
         assertThatThrownBy(()->{
-            candidatoImp.getByCodigo("9999");
+            service.getByCodigo("9999");
         }).isInstanceOf(DaviviendaNotFoundException.class);
     }
 
@@ -185,9 +184,9 @@ class ProductoServiceImplTest {
     @DisplayName(value = "actualizar precio")
     @Order(14)
     void updatePrecioProducto() {
-        ProductoResponse byCodigo = candidatoImp.getByCodigo("1002");
-        candidatoImp.updatePrecioProducto(byCodigo.id(), BigDecimal.TEN);
-        byCodigo = candidatoImp.getByCodigo("1002");
+        ProductoResponse byCodigo = service.getByCodigo("1002");
+        service.updatePrecioProducto(byCodigo.id(), BigDecimal.TEN);
+        byCodigo = service.getByCodigo("1002");
         assertThat(byCodigo.precio().intValue()).isEqualTo(BigDecimal.TEN.intValue());
     }
     @Test
@@ -195,7 +194,7 @@ class ProductoServiceImplTest {
     @Order(15)
     void updatePrecioProducto_noEcontrado() {
         assertThatThrownBy(()->{
-            candidatoImp.updatePrecioProducto(9999, BigDecimal.TEN);
+            service.updatePrecioProducto(9999, BigDecimal.TEN);
         }).isInstanceOf(DaviviendaNotFoundException.class);
     }
 
@@ -203,10 +202,10 @@ class ProductoServiceImplTest {
     @DisplayName(value = "eliminar producto")
     @Order(16)
     void deleteProduct() {
-        List<Producto> all = candidatoImp.findAll();
+        List<Producto> all = service.findAll();
         int sizeOriginal = all.size();
-        String s = candidatoImp.deleteProduct("1010");
-        List<Producto> despues = candidatoImp.findAll();
+        String s = service.deleteProduct("1010");
+        List<Producto> despues = service.findAll();
         assertThat(sizeOriginal-1).isEqualTo(despues.size());
     }
 
@@ -215,7 +214,7 @@ class ProductoServiceImplTest {
     @Order(17)
     void deleteProduct_noEcontrado() {
         assertThatThrownBy(()->{
-            candidatoImp.deleteProduct("9999");
+            service.deleteProduct("9999");
         }).isInstanceOf(DaviviendaNotFoundException.class);
 
 
