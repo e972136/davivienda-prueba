@@ -7,6 +7,7 @@ import com.davivienda.davivienda_producto.repository.ProductRepository;
 import com.davivienda.davivienda_producto.utilities.DaviviendaDuplicateException;
 import com.davivienda.davivienda_producto.utilities.DaviviendaInsuficienteException;
 import com.davivienda.davivienda_producto.utilities.DaviviendaNotFoundException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,7 +26,15 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class ProductoServiceImplTest {
 
     @Autowired
+    ProductRepository productRepository;
+
+    @Autowired
     ProductoServiceImpl candidatoImp;
+
+    @BeforeEach
+    void setUp() {
+        ProductoServiceImpl candidatoImp = new ProductoServiceImpl(productRepository);
+    }
 
     @Test
     void findAll() {

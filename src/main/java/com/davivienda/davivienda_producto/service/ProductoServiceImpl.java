@@ -47,6 +47,7 @@ public class ProductoServiceImpl implements ProductoService{
     public Producto updateProducto(int id, ProductoRequest producto) {
         Optional<Producto> byId = productRepository.findById(id);
         if(byId.isEmpty()){
+            log.info("Id {} no encontrado",id);
             throw new DaviviendaNotFoundException(MensajesSistema.NO_ENCONTRADO.getMensaje());
         }
 
@@ -54,7 +55,7 @@ public class ProductoServiceImpl implements ProductoService{
         Producto productoNuevo = MapeadoProducto.fromProductoRequestToProducto(producto,log);
         if(isNull(productoNuevo)){
             log.info(MensajesSistema.ERROR_PARSING.getMensaje());
-            throw new RuntimeException(MensajesSistema.ERROR_PARSING.getMensaje());
+            throw new DaviviendaErrorParseoException(MensajesSistema.ERROR_PARSING.getMensaje());
         }
         productoNuevo.setId(productoBD.getId());
         productoNuevo.setCodigo(productoBD.getCodigo());
@@ -82,11 +83,13 @@ public class ProductoServiceImpl implements ProductoService{
             throws DaviviendaNotFoundException,DaviviendaInsuficienteException{
         Optional<Producto> byCodigo = productRepository.findByCodigo(codigo);
         if(byCodigo.isEmpty()){
+            log.info("Codigo {} no encontrado",codigo);
             throw new DaviviendaNotFoundException(MensajesSistema.NO_ENCONTRADO.getMensaje());
         }
 
         Producto producto = byCodigo.get();
         if(producto.getExistencia()<cantidad){
+            log.info(MensajesSistema.CODIGO_NO_ENCONTRADO.getMensaje(),codigo);
             throw new DaviviendaInsuficienteException(MensajesSistema.NO_ENCONTRADO.getMensaje());
         }
 
@@ -100,23 +103,21 @@ public class ProductoServiceImpl implements ProductoService{
 
         Optional<Producto> byCodigo = productRepository.findByCodigo(producto.getCodigo());
         if(byCodigo.isPresent()){
+            log.info("Codigo {} duplicado",producto.getCodigo());
             throw new DaviviendaDuplicateException(MensajesSistema.ELEMENDO_DUPLICADO.getMensaje());
         }
 
         Producto p = MapeadoProducto.fromProductoRequestToProducto(producto,log);
         if(isNull(p)){
             log.info(MensajesSistema.ERROR_PARSING.getMensaje());
-            throw new RuntimeException(MensajesSistema.ERROR_PARSING.getMensaje());
+            throw new DaviviendaErrorParseoException(MensajesSistema.ERROR_PARSING.getMensaje());
         }
         p.setCreatedAt(LocalDate.now());
         p.setUpdatedAt(LocalDate.now());
 
         Producto saveDb = productRepository.save(p);
 
-        ProductoResponse response = MapeadoProducto.fromProductoToProductoResponse(saveDb,log);
-
-        return response;
-
+        return MapeadoProducto.fromProductoToProductoResponse(saveDb,log);
     }
 
 
@@ -126,6 +127,7 @@ public class ProductoServiceImpl implements ProductoService{
         if(byCodigo.isPresent()){
             return MapeadoProducto.fromProductoToProductoResponse(byCodigo.get(),log);
         }else {
+            log.info(MensajesSistema.CODIGO_NO_ENCONTRADO.getMensaje(),codigo);
             throw new DaviviendaNotFoundException(MensajesSistema.NO_ENCONTRADO.getMensaje());
         }
     }
@@ -138,6 +140,7 @@ public class ProductoServiceImpl implements ProductoService{
             productRepository.delete(byCodigo.get());
             return "Producto eliminado";
         }
+        log.info(MensajesSistema.CODIGO_NO_ENCONTRADO.getMensaje(),codigo);
         throw new DaviviendaNotFoundException(MensajesSistema.NO_ENCONTRADO.getMensaje());
 
     }
@@ -148,6 +151,7 @@ public class ProductoServiceImpl implements ProductoService{
     public Producto updatePrecioProducto(int id, BigDecimal precioProducto) {
         Optional<Producto> byId = productRepository.findById(id);
         if(!byId.isPresent()){
+            log.info("Id {} no encontrado",id);
             throw new DaviviendaNotFoundException(MensajesSistema.NO_ENCONTRADO.getMensaje());
         }
         Producto productoDB = byId.get();

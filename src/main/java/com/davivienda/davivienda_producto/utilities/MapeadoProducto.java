@@ -14,6 +14,9 @@ import org.slf4j.Logger;
  *
  */
 public class MapeadoProducto {
+    private MapeadoProducto() {
+    }
+
     public static ProductoResponse fromProductoToProductoResponse(Producto saveDb, Logger log) {
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,false);

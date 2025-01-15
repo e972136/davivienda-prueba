@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 public class ProductoController {
@@ -39,7 +38,7 @@ public class ProductoController {
         List<ProductoResponse> all = productoService.findAllByFamilia(familia)
                 .stream()
                 .map(p-> MapeadoProducto.fromProductoToProductoResponse(p,log))
-                .collect(Collectors.toList());
+                .toList();
         if(all.isEmpty()){
             return ResponseEntity.ok()
                     .header(MensajesSistema.LISTA_VACIA.getTipo(),MensajesSistema.LISTA_VACIA.getMensaje())
