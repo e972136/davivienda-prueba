@@ -7,8 +7,7 @@ import com.davivienda.davivienda_producto.repository.ProductRepository;
 import com.davivienda.davivienda_producto.utilities.DaviviendaDuplicateException;
 import com.davivienda.davivienda_producto.utilities.DaviviendaInsuficienteException;
 import com.davivienda.davivienda_producto.utilities.DaviviendaNotFoundException;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
@@ -23,26 +22,21 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
  *  Se utiliza JUnit 5
  */
 @SpringBootTest
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class ProductoServiceImplTest {
-
-    @Autowired
-    ProductRepository productRepository;
 
     @Autowired
     ProductoServiceImpl candidatoImp;
 
-    @BeforeEach
-    void setUp() {
-        candidatoImp = new ProductoServiceImpl(productRepository);
-    }
-
-    @Test
+     @Test
+     @Order(1)
     void findAll() {
         int size = candidatoImp.findAll().size();
         assertThat(size).isEqualTo(11);
     }
 
     @Test
+    @Order(2)
     void findAllPage() {
         Page<Producto> allPage = candidatoImp.findAllPage(1, 5);
         int size = allPage.getContent().size();
@@ -50,6 +44,7 @@ class ProductoServiceImplTest {
     }
 
     @Test
+    @Order(3)
     void updateProducto() {
         ProductoResponse p = candidatoImp.getByCodigo("1001");
         assertThat(p.familia()).isEqualTo("ELECTRICO");
@@ -65,6 +60,7 @@ class ProductoServiceImplTest {
 
 
     @Test()
+    @Order(4)
     void updateProducto_noExistente() {
 
         ProductoRequest productoRequest = new ProductoRequest(
@@ -84,18 +80,21 @@ class ProductoServiceImplTest {
 
 
     @Test
+    @Order(5)
     void findAllByFamilia() {
         List<Producto> motor = candidatoImp.findAllByFamilia("ACEITE");
         assertThat(motor).hasSize(2);
     }
 
     @Test
+    @Order(6)
     void findAllDisponibles() {
         int size = candidatoImp.findAllDisponibles().size();
         assertThat(size).isEqualTo(6);
     }
 
     @Test
+    @Order(7)
     void ventaProducto() {
         ProductoResponse byCodigo = candidatoImp.getByCodigo("1001");
         Producto producto = candidatoImp.ventaProducto(byCodigo.codigo(), 1);
@@ -103,6 +102,7 @@ class ProductoServiceImplTest {
     }
 
     @Test
+    @Order(8)
     void ventaProducto_noExistente() {
         assertThatThrownBy(()->{
             candidatoImp.ventaProducto("5000", 1);
@@ -110,6 +110,7 @@ class ProductoServiceImplTest {
     }
 
     @Test
+    @Order(9)
     void ventaProducto_insuficiente() {
         assertThatThrownBy(()->{
             candidatoImp.ventaProducto("1010", 100);
@@ -119,6 +120,7 @@ class ProductoServiceImplTest {
 
 
     @Test
+    @Order(10)
     void save() {
         ProductoResponse save = candidatoImp.save(new ProductoRequest(
                 "2020",
@@ -132,6 +134,7 @@ class ProductoServiceImplTest {
     }
 
     @Test
+    @Order(11)
     void save_duplicado() {
 
         ProductoRequest productoRequest = new ProductoRequest(
@@ -150,12 +153,14 @@ class ProductoServiceImplTest {
     }
 
     @Test
+    @Order(12)
     void getByCodigo() {
         ProductoResponse byCodigo = candidatoImp.getByCodigo("1001");
         assertThat(byCodigo.codigo()).isEqualTo("1001");
     }
 
     @Test
+    @Order(13)
     void getByCodigo_noEncontrado() {
 
         assertThatThrownBy(()->{
@@ -164,6 +169,7 @@ class ProductoServiceImplTest {
     }
 
     @Test
+    @Order(14)
     void updatePrecioProducto() {
         ProductoResponse byCodigo = candidatoImp.getByCodigo("1002");
         candidatoImp.updatePrecioProducto(byCodigo.id(), BigDecimal.TEN);
@@ -171,6 +177,7 @@ class ProductoServiceImplTest {
         assertThat(byCodigo.precio().intValue()).isEqualTo(BigDecimal.TEN.intValue());
     }
     @Test
+    @Order(15)
     void updatePrecioProducto_noEcontrado() {
         assertThatThrownBy(()->{
             candidatoImp.updatePrecioProducto(9999, BigDecimal.TEN);
@@ -178,6 +185,7 @@ class ProductoServiceImplTest {
     }
 
     @Test
+    @Order(16)
     void deleteProduct() {
         List<Producto> all = candidatoImp.findAll();
         int sizeOriginal = all.size();
@@ -187,6 +195,7 @@ class ProductoServiceImplTest {
     }
 
     @Test
+    @Order(17)
     void deleteProduct_noEcontrado() {
         assertThatThrownBy(()->{
             candidatoImp.deleteProduct("9999");
