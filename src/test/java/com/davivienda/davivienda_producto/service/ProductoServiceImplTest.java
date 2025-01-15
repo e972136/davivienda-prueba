@@ -33,7 +33,7 @@ class ProductoServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        ProductoServiceImpl candidatoImp = new ProductoServiceImpl(productRepository);
+        candidatoImp = new ProductoServiceImpl(productRepository);
     }
 
     @Test
