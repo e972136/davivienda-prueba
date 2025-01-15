@@ -23,6 +23,9 @@ public class Producto {
     @Column(name = "DESCRIPCION")
     String descripcion;
 
+    @Column(name = "FAMILIA")
+    String familia;
+
     @Column(name = "PRECIO")
     BigDecimal precio;
 
