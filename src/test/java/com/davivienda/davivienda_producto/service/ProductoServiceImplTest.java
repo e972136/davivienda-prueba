@@ -29,6 +29,7 @@ class ProductoServiceImplTest {
     ProductoServiceImpl candidatoImp;
 
      @Test
+     @DisplayName(value = "Buscar todos")
      @Order(1)
     void findAll() {
         int size = candidatoImp.findAll().size();
@@ -36,6 +37,7 @@ class ProductoServiceImplTest {
     }
 
     @Test
+    @DisplayName(value = "Buscar paginado")
     @Order(2)
     void findAllPage() {
         Page<Producto> allPage = candidatoImp.findAllPage(1, 5);
@@ -44,6 +46,7 @@ class ProductoServiceImplTest {
     }
 
     @Test
+    @DisplayName(value = "Actualizar producto")
     @Order(3)
     void updateProducto() {
         ProductoResponse p = candidatoImp.getByCodigo("1001");
@@ -60,6 +63,7 @@ class ProductoServiceImplTest {
 
 
     @Test()
+    @DisplayName(value = "Actualizar producto no existente")
     @Order(4)
     void updateProducto_noExistente() {
 
@@ -80,6 +84,7 @@ class ProductoServiceImplTest {
 
 
     @Test
+    @DisplayName(value = "Listado por familia")
     @Order(5)
     void findAllByFamilia() {
         List<Producto> motor = candidatoImp.findAllByFamilia("ACEITE");
@@ -87,6 +92,7 @@ class ProductoServiceImplTest {
     }
 
     @Test
+    @DisplayName(value = "Buscar productos disponibles")
     @Order(6)
     void findAllDisponibles() {
         int size = candidatoImp.findAllDisponibles().size();
@@ -94,6 +100,7 @@ class ProductoServiceImplTest {
     }
 
     @Test
+    @DisplayName(value = "Venta de producto")
     @Order(7)
     void ventaProducto() {
         ProductoResponse byCodigo = candidatoImp.getByCodigo("1001");
@@ -102,6 +109,7 @@ class ProductoServiceImplTest {
     }
 
     @Test
+    @DisplayName(value = "Venta de producto inexistente")
     @Order(8)
     void ventaProducto_noExistente() {
         assertThatThrownBy(()->{
@@ -110,6 +118,7 @@ class ProductoServiceImplTest {
     }
 
     @Test
+    @DisplayName(value = "Venta de producto sin existencia")
     @Order(9)
     void ventaProducto_insuficiente() {
         assertThatThrownBy(()->{
@@ -120,6 +129,7 @@ class ProductoServiceImplTest {
 
 
     @Test
+    @DisplayName(value = "Guardar producto")
     @Order(10)
     void save() {
         ProductoResponse save = candidatoImp.save(new ProductoRequest(
@@ -134,6 +144,7 @@ class ProductoServiceImplTest {
     }
 
     @Test
+    @DisplayName(value = "Guardar duplicado")
     @Order(11)
     void save_duplicado() {
 
@@ -153,6 +164,7 @@ class ProductoServiceImplTest {
     }
 
     @Test
+    @DisplayName(value = "Buscar por codigo")
     @Order(12)
     void getByCodigo() {
         ProductoResponse byCodigo = candidatoImp.getByCodigo("1001");
@@ -160,6 +172,7 @@ class ProductoServiceImplTest {
     }
 
     @Test
+    @DisplayName(value = "Buscar codigo inexistente")
     @Order(13)
     void getByCodigo_noEncontrado() {
 
@@ -169,6 +182,7 @@ class ProductoServiceImplTest {
     }
 
     @Test
+    @DisplayName(value = "actualizar precio")
     @Order(14)
     void updatePrecioProducto() {
         ProductoResponse byCodigo = candidatoImp.getByCodigo("1002");
@@ -177,6 +191,7 @@ class ProductoServiceImplTest {
         assertThat(byCodigo.precio().intValue()).isEqualTo(BigDecimal.TEN.intValue());
     }
     @Test
+    @DisplayName(value = "actualizar precio de producto inexistente")
     @Order(15)
     void updatePrecioProducto_noEcontrado() {
         assertThatThrownBy(()->{
@@ -185,6 +200,7 @@ class ProductoServiceImplTest {
     }
 
     @Test
+    @DisplayName(value = "eliminar producto")
     @Order(16)
     void deleteProduct() {
         List<Producto> all = candidatoImp.findAll();
@@ -195,6 +211,7 @@ class ProductoServiceImplTest {
     }
 
     @Test
+    @DisplayName(value = "eliminar producto inexistente")
     @Order(17)
     void deleteProduct_noEcontrado() {
         assertThatThrownBy(()->{
