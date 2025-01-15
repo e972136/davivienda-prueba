@@ -47,6 +47,7 @@ class ProductoControllerTest {
 
         Mockito.when(productoServiceService.save(any(ProductoRequest.class))).thenReturn(response);
         ObjectMapper mapper = new ObjectMapper();
+
         String request = mapper.writeValueAsString(producto);
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post(URL_SAVE)//.headers(http)
                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
@@ -61,6 +62,7 @@ class ProductoControllerTest {
     @Test
     @DisplayName(value = "Post Guardar -> Status 400 Test de BadRequest.")
     void testErrorGuardarProducto() throws Exception {
+
 
         ProductoRequest producto=new ProductoRequest("","","desc",new BigDecimal(100),1);
         ProductoResponse response=new ProductoResponse(1,"","","desc",new BigDecimal(100),1);
@@ -84,6 +86,7 @@ class ProductoControllerTest {
 
         ProductoRequest producto=new ProductoRequest("0001","name","desc",new BigDecimal(100),1);
         ProductoResponse response=new ProductoResponse(1,"","name","desc",new BigDecimal(100),1);
+
 
         Mockito.when(productoServiceService.save(any(ProductoRequest.class))).thenThrow(DaviviendaDuplicateException.class);
         ObjectMapper mapper = new ObjectMapper();
