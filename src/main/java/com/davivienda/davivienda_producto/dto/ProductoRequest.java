@@ -10,9 +10,19 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+/**
+ *  dto Para la solicitud de la entidad Producto
+ * @param id identificador unico
+ * @param codigo codigo alfanumerico del producto
+ * @param descripcion descripcion del producto
+ * @param familia familia a la que pertenece [MOTOR, ELECTRICO...]
+ * @param precio precio del producto
+ * @param existencia cantidad de existencia
+ */
 public class ProductoRequest{
         @NotNull
         @Size(min=4,max = 8)

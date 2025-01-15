@@ -176,7 +176,7 @@ public class ProductoController {
     }
 
     @PutMapping("/update/{id}")
-    @Operation(summary = "Actualizar producto")
+    @Operation(summary = "Actualizar producto",description = "No actualiza ni el Id ni el Codigo del producto")
     ResponseEntity<ProductoResponse> updateProduct(
             @PathVariable int id,
             @Valid @RequestBody ProductoRequest producto,

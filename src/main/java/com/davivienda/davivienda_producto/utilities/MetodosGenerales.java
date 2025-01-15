@@ -4,6 +4,10 @@ import org.springframework.validation.BindingResult;
 
 import java.util.stream.Collectors;
 
+/**
+ * Metodos generales
+ *
+ */
 public class MetodosGenerales {
     public static String mensajeDeValidacion(BindingResult result){
         String collect = result.getFieldErrors().stream().map(err -> {

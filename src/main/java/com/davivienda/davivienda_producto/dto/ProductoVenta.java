@@ -6,6 +6,9 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
+/**
+ *  Entidad para retornar la venta del producto
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

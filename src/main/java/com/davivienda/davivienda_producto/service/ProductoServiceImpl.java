@@ -19,6 +19,9 @@ import java.util.Optional;
 
 import static java.util.Objects.isNull;
 
+/**
+ *  Implementacion del servicio de producto
+ */
 @Service
 public class ProductoServiceImpl implements ProductoService{
 
@@ -47,11 +50,6 @@ public class ProductoServiceImpl implements ProductoService{
             throw new DaviviendaNotFoundException(MensajesSistema.NO_ENCONTRADO.getMensaje());
         }
 
-        Optional<Producto> byCodigo = productRepository.findByCodigo(producto.getCodigo());
-        if(byCodigo.isPresent()){
-            throw new DaviviendaDuplicateException(MensajesSistema.ELEMENDO_DUPLICADO.getMensaje());
-        }
-
         Producto productoBD = byId.get();
         Producto productoNuevo = MapeadoProducto.fromProductoRequestToProducto(producto,log);
         if(isNull(productoNuevo)){
@@ -59,6 +57,7 @@ public class ProductoServiceImpl implements ProductoService{
             throw new RuntimeException(MensajesSistema.ERROR_PARSING.getMensaje());
         }
         productoNuevo.setId(productoBD.getId());
+        productoNuevo.setCodigo(productoBD.getCodigo());
         productoNuevo.setCreatedAt(productoBD.getCreatedAt());
         productoNuevo.setUpdatedAt(LocalDate.now());
         return productRepository.save(productoNuevo);

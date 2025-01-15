@@ -56,7 +56,7 @@ public interface ProductoService {
     /**
      *
      * @param id del producto
-     * @param producto entidad con la data del producto
+     * @param producto entidad con la data del producto, el Codigo de producto no sera actualizado
      * @return el producto actualizado
      */
     Producto updateProducto(int id, ProductoRequest producto);

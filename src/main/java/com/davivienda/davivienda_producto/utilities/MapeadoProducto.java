@@ -9,6 +9,10 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.slf4j.Logger;
 
+/**
+ *  Metodos para mapeados de la entidad producto
+ *
+ */
 public class MapeadoProducto {
     public static ProductoResponse fromProductoToProductoResponse(Producto saveDb, Logger log) {
         ObjectMapper mapper = new ObjectMapper();

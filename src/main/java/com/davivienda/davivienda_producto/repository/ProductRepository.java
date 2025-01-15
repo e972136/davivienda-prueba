@@ -6,6 +6,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ *  Repositorio entidad producto
+ */
 public interface ProductRepository extends JpaRepository<Producto,Integer> {
     Optional<Producto> findByCodigo(String codigo);
 

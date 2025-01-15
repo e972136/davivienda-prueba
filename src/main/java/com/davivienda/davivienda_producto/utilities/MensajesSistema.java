@@ -1,5 +1,9 @@
 package com.davivienda.davivienda_producto.utilities;
 
+/**
+ * Mensajes centralizados del sistema
+ *
+ */
 public enum MensajesSistema {
 
     NO_ENCONTRADO("error-davivienda","Producto no encontrado"),
