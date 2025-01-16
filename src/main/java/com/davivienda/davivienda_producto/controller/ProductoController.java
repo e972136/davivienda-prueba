@@ -10,21 +10,25 @@ import com.davivienda.davivienda_producto.utilities.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
+@Slf4j
+@Validated
 public class ProductoController {
 
     private final ProductoService productoService;
-    private final Logger log = LoggerFactory.getLogger(getClass());
 
     public ProductoController(ProductoService productoService) {
         this.productoService = productoService;
@@ -51,9 +55,10 @@ public class ProductoController {
     @GetMapping("/all/page")
     @Operation(summary = "Obtener lista de productos paginado")
     ResponseEntity<Page<ProductoResponse>> allProductsPage(
-            @RequestParam(required = true,defaultValue = "1") Integer page,
-            @RequestParam(required = true,defaultValue = "5") Integer size
+            @RequestParam(required = true,defaultValue = "1")@Min(1) Integer page,
+            @RequestParam(required = true,defaultValue = "5")@Min(1) Integer size
     ){
+
         Page<ProductoResponse> all = productoService.findAllPage(page,size)
                 .map(p->MapeadoProducto.fromProductoToProductoResponse(p,log));
         if(all.isEmpty()){

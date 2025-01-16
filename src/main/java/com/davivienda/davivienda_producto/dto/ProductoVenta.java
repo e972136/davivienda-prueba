@@ -9,18 +9,22 @@ import java.math.BigDecimal;
 /**
  *  Entidad para retornar la venta del producto
  */
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class ProductoVenta {
+public record ProductoVenta(
+        int id,
+        String codigo,
+        int cantidadVendida,
+        BigDecimal precio,
+        BigDecimal subTotal
+) {
 
+    public ProductoVenta(int id, String codigo, int cantidadVendida, BigDecimal precio) {
+        this(id, codigo, cantidadVendida, precio, getSubTotal(cantidadVendida,precio));
+    }
 
-    int id;
-    String codigo;
-    int cantidadVendida;
-    BigDecimal precio;
-
-    public BigDecimal getSubTotal() {
+    private static BigDecimal getSubTotal(
+            int cantidadVendida,
+            BigDecimal precio
+    ) {
         return precio.multiply(BigDecimal.valueOf(cantidadVendida));
     }
 }

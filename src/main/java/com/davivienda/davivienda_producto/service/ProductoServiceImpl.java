@@ -5,6 +5,7 @@ import com.davivienda.davivienda_producto.dto.ProductoResponse;
 import com.davivienda.davivienda_producto.entitie.Producto;
 import com.davivienda.davivienda_producto.repository.ProductRepository;
 import com.davivienda.davivienda_producto.utilities.*;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -23,9 +24,9 @@ import static java.util.Objects.isNull;
  *  Implementacion del servicio de producto
  */
 @Service
+@Slf4j
 public class ProductoServiceImpl implements ProductoService{
 
-    private final Logger log = LoggerFactory.getLogger(getClass());
 
     private final ProductRepository productRepository;
 
@@ -101,9 +102,9 @@ public class ProductoServiceImpl implements ProductoService{
     @Override
     public ProductoResponse save(ProductoRequest producto){
 
-        Optional<Producto> byCodigo = productRepository.findByCodigo(producto.getCodigo());
+        Optional<Producto> byCodigo = productRepository.findByCodigo(producto.codigo());
         if(byCodigo.isPresent()){
-            log.info("Codigo {} duplicado",producto.getCodigo());
+            log.info("Codigo {} duplicado",producto.codigo());
             throw new DaviviendaDuplicateException(MensajesSistema.ELEMENDO_DUPLICADO.getMensaje());
         }
 
