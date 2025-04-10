@@ -35,7 +35,7 @@ public class ProductoController {
     ResponseEntity<List<ProductoResponse>> allProductsByFamily(
         @PathVariable String familia
     ){
-        List<ProductoResponse> all = productoService.findAllByFamilia(familia)
+        List<ProductoResponse> all = productoService.findAllByFamilia(familia.trim())
                 .stream()
                 .map(p-> MapeadoProducto.fromProductoToProductoResponse(p,log))
                 .toList();
